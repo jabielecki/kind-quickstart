@@ -21,7 +21,11 @@ kubectl cluster-info
 echo ""
 echo ""
 echo ----------- metallb -----------------
-kubectl apply -f https://raw.githubusercontent.com/google/metallb/v0.8.1/manifests/metallb.yaml
+
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/namespace.yaml
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/metallb.yaml
+kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
+
 SUBNET=$(sudo -H docker network inspect bridge | jq -r '.[0].IPAM.Config[0].Subnet | sub("(?<c>.*).0.0/16"; .c + ".80.2-" + .c + ".80.254" ; "")')
 if ! echo "$SUBNET" | grep -E '[0-9]-[0-9]' ; then
     echo "Problem: cannot determine docker subnet via jq"
