@@ -46,23 +46,21 @@ echo ""
 echo ""
 echo ----------- helm --------------------
 
-curl https://get.helm.sh/helm-v3.0.0-rc.3-linux-amd64.tar.gz | tar zvxf - linux-amd64/helm
-#curl https://get.helm.sh/helm-v2.16.0-linux-amd64.tar.gz
+curl -L https://get.helm.sh/helm-v3.2.0-linux-amd64.tar.gz | tar zvxf - linux-amd64/helm
 sudo mv linux-amd64/helm /usr/local/bin/helm
 rmdir linux-amd64/
-helm init
-helm repo update
+helm repo add stable https://kubernetes-charts.storage.googleapis.com/
 
 echo ""
 echo ""
-echo -------------------------------------
-echo --- Commands to try now:          ---
+echo --- Commands to try now: ----------------
 echo 
-echo export KUBECONFIG=~/.kube/kind
+echo 'export KUBECONFIG=~/.kube/kind'
 echo 'source <(kubectl completion bash)'
 echo 'source <(helm    completion bash)'
 echo
-echo helm search nginx
-echo helm install mymariadb stable/mariadb
-echo -------------------------------------
+echo helm search hub nginx
+echo helm repo update
+echo helm install stable/mysql --generate-name
+echo -----------------------------------------
 
