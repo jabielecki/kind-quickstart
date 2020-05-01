@@ -1,12 +1,16 @@
 # Kind Restart
 
-This guide will bring up the local dev system (laptop):
-  - Helm 3 (hence no tiller, yay)
-  - Kubernetes on a docker with kind (3 nodes on 1 system)
-  - support for Services of type `LoadBalancer` by setting up metallb
+I see a number of tutorials here and there that start off with "pre-requisites: 1. Have a kubectl configured with some Kubernetes cluster".
+
+This guide will provision a nice setup on a single local system (like my laptop):
+  - Kubernetes
+    - 3 nodes on 1 system
+    - achieved using Kind and Docker
+    - supporting Services of type `LoadBalancer` by setting up Metallb
+  - Helm 3 (no tiller, yay)
 
 Unfortunately kind clusters don't survive docker daemon restarts. Hence
-this script will **destroy the current cluster** and set up a new one.
+this script will **destroy the current cluster** and provision a new one.
 
 # Why bother with that LoadBalancer?
 Kind does not offer an implementation of load-balancers (mechanisms that provide
@@ -22,7 +26,8 @@ As much as you could convert such Services to one of inferior types
 
 # Requirements
 
-  - Linux with `snap` (Ubuntu 18 or 19 is fine)
+  - Linux amd64 (Ubuntu 18 or 19 is fine)
+  - RAM: 16 GB
   - root access via sudo
   - `jq` command with version 1.5 or above
 
