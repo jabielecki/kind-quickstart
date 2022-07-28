@@ -43,10 +43,7 @@ sudo snap install jq
 # Usage
 
 ```bash
-./kind-restart.sh
-export KUBECONFIG=~/.kube/kind
-source <(kubectl completion bash)
-source <(helm    completion bash)
+./kind.sh
 ```
 
 # Can I run it at system startup?
