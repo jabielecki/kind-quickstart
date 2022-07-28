@@ -65,22 +65,28 @@ EOF
 echo ""
 echo ""
 echo ----------- helm --------------------
+echo ""
 
-curl -L https://get.helm.sh/helm-v3.2.0-linux-amd64.tar.gz | tar zvxf - linux-amd64/helm
+curl -L https://get.helm.sh/helm-v3.9.2-linux-amd64.tar.gz | tar zvxf - linux-amd64/helm
 sudo mv linux-amd64/helm /usr/local/bin/helm
 rmdir linux-amd64/
-helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+# helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+# helm repo update
+# export PATH="$(go env GOPATH)/bin:$PATH"
 
-echo ""
-echo ""
-echo --- Commands to try now: ----------------
-echo 
-echo 'export KUBECONFIG=~/.kube/kind'
-echo 'source <(kubectl completion bash)'
-echo 'source <(helm    completion bash)'
-echo
-echo helm search hub nginx
-echo helm repo update
-echo helm install stable/mysql --generate-name
-echo -----------------------------------------
+cat << '__EOF__'
 
+--- Commands to try now: ----------------
+
+export KUBECONFIG=~/.kube/kind
+source <(kubectl completion bash)
+source <(helm    completion bash)
+helm search hub nginx             # See: https://helm.sh/docs/intro/quickstart/#initialize-a-helm-chart-repository
+helm help install
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo update
+helm install bitnami/nginx --generate-name
+
+-----------------------------------------
+
+__EOF__
