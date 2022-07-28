@@ -4,23 +4,39 @@ cd "$(dirname $0)"
 
 echo ----------- kind -----------------
 
-go install sigs.k8s.io/kind
-# Version is pinned inside go.mod file; to bump it:
-#     go get -u sigs.k8s.io/kind
+EX=$(sudo -H which kind)
+if [[ -n "$EX" && "$EX" != /usr/local/bin/kind ]] ; then
+	echo "This script will install /usr/local/bin/kind, but then it would use $EX anyway."
+	echo "This seems wrong."
+	exit 1
+fi
 
-sudo cp -p "$(go env GOPATH)/bin/kind" /usr/local/bin/kind
+echo The existing /usr/local/bin/kind binary:
+sudo -H kind --version
+
+# Subsequent `sudo kind` might not search GOPATH or GOBIN, but it will hopefully see /usr/local/bin.
+T=$(mktemp -d)
+
+GOBIN=$T   go install sigs.k8s.io/kind@v0.14.0
+
+sudo mv "$T/kind" /usr/local/bin/kind
+sudo chown root:root /usr/local/bin/kind
+
+rmdir "$T"
 
 sudo -H kind delete cluster 2> /dev/null
 sudo -H kind create cluster --config ./kind.yaml
 
 mkdir -p ~/.kube
 sudo -H kind get kubeconfig --name="kind" > ~/.kube/kind
+sudo chmod 0600 ~/.kube/kind
 export KUBECONFIG=~/.kube/kind
 kubectl cluster-info
 
 echo ""
 echo ""
 echo ----------- metallb -----------------
+echo ""
 
 kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/namespace.yaml
 kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/metallb.yaml
