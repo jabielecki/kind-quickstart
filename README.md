@@ -31,16 +31,9 @@ As much as you could convert such Services to one of inferior types
 
 - Linux amd64 (Ubuntu 18 or 19 is fine)
 - root access via sudo
-- `jq` command with version 1.5 or above
-
-## Initial setup
-
-```bash
-sudo snap install --classic docker
-sudo snap install --classic kubectl
-sudo snap install --classic go
-sudo snap install jq
-```
+- docker
+- kubectl
+- go compiler >=1.13
 
 ## Usage
 
